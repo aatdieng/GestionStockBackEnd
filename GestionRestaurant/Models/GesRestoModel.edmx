@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GesRestoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Commandes">
+          <Key>
+            <PropertyRef Name="CommandeID" />
+          </Key>
+          <Property Name="CommandeID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CommandeNo" Type="varchar" MaxLength="50" />
+          <Property Name="TableID" Type="int" />
+          <Property Name="PMethode" Type="varchar" MaxLength="50" />
+          <Property Name="GTotal" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="DetailsCommande">
+          <Key>
+            <PropertyRef Name="DetailsID" />
+          </Key>
+          <Property Name="DetailsID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CommandeID" Type="bigint" />
+          <Property Name="ProduitID" Type="int" />
+          <Property Name="Quantite" Type="int" />
+        </EntityType>
+        <EntityType Name="Produits">
+          <Key>
+            <PropertyRef Name="ProduitID" />
+          </Key>
+          <Property Name="ProduitID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProduitName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Prix" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tables">
+          <Key>
+            <PropertyRef Name="TableID" />
+          </Key>
+          <Property Name="TableID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroTable" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_Commandes_Tables">
+          <End Role="Tables" Type="Self.Tables" Multiplicity="0..1" />
+          <End Role="Commandes" Type="Self.Commandes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tables">
+              <PropertyRef Name="TableID" />
+            </Principal>
+            <Dependent Role="Commandes">
+              <PropertyRef Name="TableID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsCommande_Commandes">
+          <End Role="Commandes" Type="Self.Commandes" Multiplicity="0..1" />
+          <End Role="DetailsCommande" Type="Self.DetailsCommande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Commandes">
+              <PropertyRef Name="CommandeID" />
+            </Principal>
+            <Dependent Role="DetailsCommande">
+              <PropertyRef Name="CommandeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsCommande_Produits">
+          <End Role="Produits" Type="Self.Produits" Multiplicity="0..1" />
+          <End Role="DetailsCommande" Type="Self.DetailsCommande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produits">
+              <PropertyRef Name="ProduitID" />
+            </Principal>
+            <Dependent Role="DetailsCommande">
+              <PropertyRef Name="ProduitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GesRestoModelStoreContainer">
+          <EntitySet Name="Commandes" EntityType="Self.Commandes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetailsCommande" EntityType="Self.DetailsCommande" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Produits" EntityType="Self.Produits" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tables" EntityType="Self.Tables" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Commandes_Tables" Association="Self.FK_Commandes_Tables">
+            <End Role="Tables" EntitySet="Tables" />
+            <End Role="Commandes" EntitySet="Commandes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsCommande_Commandes" Association="Self.FK_DetailsCommande_Commandes">
+            <End Role="Commandes" EntitySet="Commandes" />
+            <End Role="DetailsCommande" EntitySet="DetailsCommande" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsCommande_Produits" Association="Self.FK_DetailsCommande_Produits">
+            <End Role="Produits" EntitySet="Produits" />
+            <End Role="DetailsCommande" EntitySet="DetailsCommande" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GesRestoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Commande">
+          <Key>
+            <PropertyRef Name="CommandeID" />
+          </Key>
+          <Property Name="CommandeID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommandeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TableID" Type="Int32" />
+          <Property Name="PMethode" Type="String" />
+          <Property Name="GTotal" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Table" Relationship="Self.FK_Commandes_Tables" FromRole="Commandes" ToRole="Tables" />
+          <NavigationProperty Name="DetailsCommandes" Relationship="Self.FK_DetailsCommande_Commandes" FromRole="Commandes" ToRole="DetailsCommande" />
+        </EntityType>
+        <EntityType Name="DetailsCommande">
+          <Key>
+            <PropertyRef Name="DetailsID" />
+          </Key>
+          <Property Name="DetailsID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommandeID" Type="Int64" />
+          <Property Name="ProduitID" Type="Int32" />
+          <Property Name="Quantite" Type="Int32" />
+          <NavigationProperty Name="Commande" Relationship="Self.FK_DetailsCommande_Commandes" FromRole="DetailsCommande" ToRole="Commandes" />
+          <NavigationProperty Name="Produit" Relationship="Self.FK_DetailsCommande_Produits" FromRole="DetailsCommande" ToRole="Produits" />
+        </EntityType>
+        <EntityType Name="Produit">
+          <Key>
+            <PropertyRef Name="ProduitID" />
+          </Key>
+          <Property Name="ProduitID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProduitName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prix" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <NavigationProperty Name="DetailsCommandes" Relationship="Self.FK_DetailsCommande_Produits" FromRole="Produits" ToRole="DetailsCommande" />
+        </EntityType>
+        <EntityType Name="Table">
+          <Key>
+            <PropertyRef Name="TableID" />
+          </Key>
+          <Property Name="TableID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroTable" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Commandes" Relationship="Self.FK_Commandes_Tables" FromRole="Tables" ToRole="Commandes" />
+        </EntityType>
+        <Association Name="FK_Commandes_Tables">
+          <End Role="Tables" Type="Self.Table" Multiplicity="0..1" />
+          <End Role="Commandes" Type="Self.Commande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tables">
+              <PropertyRef Name="TableID" />
+            </Principal>
+            <Dependent Role="Commandes">
+              <PropertyRef Name="TableID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsCommande_Commandes">
+          <End Role="Commandes" Type="Self.Commande" Multiplicity="0..1" />
+          <End Role="DetailsCommande" Type="Self.DetailsCommande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Commandes">
+              <PropertyRef Name="CommandeID" />
+            </Principal>
+            <Dependent Role="DetailsCommande">
+              <PropertyRef Name="CommandeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DetailsCommande_Produits">
+          <End Role="Produits" Type="Self.Produit" Multiplicity="0..1" />
+          <End Role="DetailsCommande" Type="Self.DetailsCommande" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produits">
+              <PropertyRef Name="ProduitID" />
+            </Principal>
+            <Dependent Role="DetailsCommande">
+              <PropertyRef Name="ProduitID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GesRestoEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Commandes" EntityType="Self.Commande" />
+          <EntitySet Name="DetailsCommandes" EntityType="Self.DetailsCommande" />
+          <EntitySet Name="Produits" EntityType="Self.Produit" />
+          <EntitySet Name="Tables" EntityType="Self.Table" />
+          <AssociationSet Name="FK_Commandes_Tables" Association="Self.FK_Commandes_Tables">
+            <End Role="Tables" EntitySet="Tables" />
+            <End Role="Commandes" EntitySet="Commandes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsCommande_Commandes" Association="Self.FK_DetailsCommande_Commandes">
+            <End Role="Commandes" EntitySet="Commandes" />
+            <End Role="DetailsCommande" EntitySet="DetailsCommandes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DetailsCommande_Produits" Association="Self.FK_DetailsCommande_Produits">
+            <End Role="Produits" EntitySet="Produits" />
+            <End Role="DetailsCommande" EntitySet="DetailsCommandes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GesRestoModelStoreContainer" CdmEntityContainer="GesRestoEntities">
+          <EntitySetMapping Name="Commandes">
+            <EntityTypeMapping TypeName="GesRestoModel.Commande">
+              <MappingFragment StoreEntitySet="Commandes">
+                <ScalarProperty Name="CommandeID" ColumnName="CommandeID" />
+                <ScalarProperty Name="CommandeNo" ColumnName="CommandeNo" />
+                <ScalarProperty Name="TableID" ColumnName="TableID" />
+                <ScalarProperty Name="PMethode" ColumnName="PMethode" />
+                <ScalarProperty Name="GTotal" ColumnName="GTotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetailsCommandes">
+            <EntityTypeMapping TypeName="GesRestoModel.DetailsCommande">
+              <MappingFragment StoreEntitySet="DetailsCommande">
+                <ScalarProperty Name="DetailsID" ColumnName="DetailsID" />
+                <ScalarProperty Name="CommandeID" ColumnName="CommandeID" />
+                <ScalarProperty Name="ProduitID" ColumnName="ProduitID" />
+                <ScalarProperty Name="Quantite" ColumnName="Quantite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Produits">
+            <EntityTypeMapping TypeName="GesRestoModel.Produit">
+              <MappingFragment StoreEntitySet="Produits">
+                <ScalarProperty Name="ProduitID" ColumnName="ProduitID" />
+                <ScalarProperty Name="ProduitName" ColumnName="ProduitName" />
+                <ScalarProperty Name="Prix" ColumnName="Prix" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tables">
+            <EntityTypeMapping TypeName="GesRestoModel.Table">
+              <MappingFragment StoreEntitySet="Tables">
+                <ScalarProperty Name="TableID" ColumnName="TableID" />
+                <ScalarProperty Name="NumeroTable" ColumnName="NumeroTable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
