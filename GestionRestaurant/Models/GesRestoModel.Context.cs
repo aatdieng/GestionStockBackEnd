@@ -18,6 +18,7 @@ namespace GestionRestaurant.Models
         public GesRestoEntities()
             : base("name=GesRestoEntities")
         {
+            base.Configuration.ProxyCreationEnabled = false;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
